@@ -1,0 +1,122 @@
+
+.header {
+    background-color: dimgray; 
+    color: white; 
+    text-align: center; 
+    height: 50px; 
+    display: flex; 
+    align-items: end; 
+    justify-content: center; 
+}
+
+.header-center {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    gap: 10px; 
+    width: 100%;
+}
+
+.header-left, .header-right {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.header-left {
+    justify-content: left;
+}
+
+.header-right {
+    justify-content: right;
+    gap: 5px;
+}
+
+/* --------------------------------------------------------------------------- */
+
+.bottom {
+    display: flex;
+    justify-content: center;
+}
+
+.tile {
+    background-color: var(--color-tile-background);
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 50px;
+}
+
+.search {
+    display: flex;
+    margin: 10px 10px;
+    border: 1px solid var(--color-tile-border);
+    padding: 10px;
+    gap: 5px;
+    margin-bottom: 40px;
+}
+
+.search > input {
+    width: 100%;
+    background-color: var(--color-tile-background);
+    outline: none;
+    border: none;
+    color: white;
+}
+
+::placeholder {
+    color: var(--color-tile-font-2nd);
+  }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 10px;
+    border: none !important;
+    border-spacing: 0;
+    color: white;    
+    border-spacing: 0px;
+}
+
+th, td {
+    text-align: left;
+    margin: 0;
+    border: none;
+}
+
+th {
+    font-size: 12px;
+    font-weight: normal;
+    color: var(--color-tile-font-2nd);
+    padding: 5px 10px;
+}
+
+td {
+    font-size: 16px;
+    padding: 10px 10px;
+    border-top: 1px solid var(--color-tile-border);
+    border-left: 1px solid rgba(0, 0, 0, 0);
+    border-right: 1px solid rgba(0, 0, 0, 0);
+    border-width: 1px;
+    vertical-align: top;
+}
+
+td:not(:last-child) {
+    padding-right: 90px;
+}
+
+tr:hover > td {
+    background-color: var(--color-tile-background-hl);
+    cursor: pointer;
+}
+
+.emphasized {
+    font-weight: bold;    
+    margin-bottom: 5px;
+}
+
+.extra-info {
+    color: var(--color-tile-font-2nd);
+}

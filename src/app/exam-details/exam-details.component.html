@@ -1,0 +1,1446 @@
+<div class="header" (click)="closeContextMenu()">
+  <div class="header-left">
+    <button (click)="exitPage()"> <span class="material-symbols-outlined">arrow_back</span></button>
+  </div>
+  <div class="header-center">
+    <span style="font-size: 20px; margin-bottom: 10px;">{{ patient.surname }}, {{ patient.name }}</span>
+    <span style="font-size: 14px; color: lightgrey; margin-bottom: 10px;">{{ getBirthdate() | date: 'dd.MM.yyyy' }}
+      ({{ getAge() }}), <span class="material-symbols-outlined" style="font-size: 14px;">male</span></span>
+  </div>
+  <div class="header-right">
+    <span class="material-symbols-outlined">account_circle</span>
+    <span>{{ userName }}</span>
+  </div>
+</div>
+<!-- Left Side -->
+<div style="display: flex;" (click)="closeContextMenu()" (wheel)="closeContextMenu()">
+  <div class="side-left" style="position: relative;">
+    <div style="position: absolute; background-color: black; width: 5px; height: auto; top: 50px; left: 30px"></div>
+    <br>
+    <br>
+    <!-- Bildqualität -->
+    <div class="flex" [ngClass]="{'checked': progress[0], 'current': progressCurrent == 0}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(0)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[0]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Bildqualität</h1>
+        <div class="tile">
+          <table>
+            <tr>
+              <th>Datum</th>
+              <th>T2W</th>
+              <th>DWI</th>
+              <th>DCE</th>
+              <th>PI-QUAL</th>
+            </tr>
+            <tr *ngFor="let exam of exams; index as i;"
+              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
+              <!-- Date -->
+              <td (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
+                <div class="cell-content">
+                  <span>{{exam.date | date: 'dd.MM.yyyy' }}</span>
+                </div>
+              </td>
+              <!-- T2W -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.imageQuality[0]), 'qual-0')"
+                (dblclick)="detectDblClick(exam, 'qual-0')" [ngClass]="{'na': isNAZ(exam.imageQuality[0])}">
+                <div class="cell-content" *ngIf="!exam.editImageQuality[0]">{{ toBool(exam.imageQuality[0]) }}</div>
+                <div class="cell-content" *ngIf="exam.editImageQuality[0]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- DWI -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.imageQuality[1]), 'qual-1')"
+                (dblclick)="detectDblClick(exam, 'qual-1')" [ngClass]="{'na': isNAZ(exam.imageQuality[1])}">
+                <div class="cell-content" *ngIf="!exam.editImageQuality[1]">{{ toBool(exam.imageQuality[1]) }}</div>
+                <div class="cell-content" *ngIf="exam.editImageQuality[1]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- DCE -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.imageQuality[2]), 'qual-2')"
+                (dblclick)="detectDblClick(exam, 'qual-2')" [ngClass]="{'na': isNAZ(exam.imageQuality[2])}">
+                <div class="cell-content" *ngIf="!exam.editImageQuality[2]">{{ toBool(exam.imageQuality[2]) }}</div>
+                <div class="cell-content" *ngIf="exam.editImageQuality[2]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- PI-QUAL -->
+              <td (contextmenu)="detectClickR($event, exam, toPIRADS(exam.imageQuality[3]), 'qual-3')"
+                (dblclick)="detectDblClick(exam, 'qual-3')" [ngClass]="{'na': isNAZ(exam.imageQuality[3])}">
+                <div class="cell-content" *ngIf="!exam.editImageQuality[3]">{{ toPIRADS(exam.imageQuality[3]) }}</div>
+                <div class="cell-content" *ngIf="exam.editImageQuality[3]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br>
+      </div>
+    </div>
+    <!-- Prostata -->
+    <div class="flex" [ngClass]="{'checked': progress[1], 'current': progressCurrent == 1}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(1)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[1]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Prostata Messungen</h1>
+        <div class="tile">
+          <table>
+            <tr>
+              <th class="left">Untersuchung vom</th>
+              <th>PSA Wert</th>
+              <th>PSA Datum</th>
+              <th>Volum</th>
+              <th>PSA-Dichte</th>
+            </tr>
+            <ng-container *ngFor="let exam of exams; index as i;">
+              <tr [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
+                <td class="left" (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
+                  <div class="cell-content">
+                    <span>{{exam.date | date: 'dd.MM.yyyy' }}</span>
+                  </div>
+                </td>
+                <!-- PSA Wert -->
+                <td (contextmenu)="detectClickR($event, exam, exam.PSAValue, 'psa-value')"
+                  (dblclick)="detectDblClick(exam, 'psa-value')" [ngClass]="{'na': isNA(exam.PSAValue)}">
+                  <div class="cell-content" *ngIf="!exam.editPSA">
+                    <span> {{ toNumber(exam.PSAValue, 1) }} </span>
+                    <span class="unit" *ngIf="!isNA(exam.PSAValue)"> ng/ml</span>
+                  </div>
+                  <div class="cell-content" *ngIf="exam.editPSA">
+                    <div>
+                      <div>
+                        <input type="number" [(ngModel)]="valueEdited[0]">
+                        <span class="unit"> ng/ml</span>
+                      </div>
+                      <div style="display: flex;" class="edit-button-container">
+                        <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                          <span class="material-symbols-outlined">check</span>
+                        </button>
+                        <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <!-- PSA Datum -->
+                <td (contextmenu)="detectClickR($event, exam, toDate(exam.PSADate), 'psa-date')"
+                  (dblclick)="detectDblClick(exam, 'psa-date')" [ngClass]="{'na': isNAD(exam.PSADate)}">
+                  <div class="cell-content" *ngIf="!exam.editPSADate">
+                    <span> {{ toDate(exam.PSADate) }} </span>
+                  </div>
+                  <div class="cell-content" *ngIf="exam.editPSADate">
+                    <div>
+                      <input type="date" [(ngModel)]="valueEditedB[0]" style="width: 120px;">
+                      <div style="display: flex;" class="edit-button-container">
+                        <button (click)="exam.confirmEdit(valueEditedB)" class="edit-button-confirm">
+                          <span class="material-symbols-outlined">check</span>
+                        </button>
+                        <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <!-- Prostata Volum -->
+                <td (contextmenu)="detectClickR($event, exam, exam.ProstateVolume, 'prostate-volume')"
+                  (dblclick)="detectDblClick(exam, 'prostate-volume')" [ngClass]="{'na': isNA(exam.ProstateVolume)}">
+                  <div class="cell-content" *ngIf="!exam.editProstateVolume">
+                    {{ toNumber(exam.ProstateVolume, 1) }}
+                    <span class="unit" *ngIf="!isNA(exam.ProstateVolume)"> ml</span>
+                  </div>
+                  <div class="cell-content" *ngIf="exam.editProstateVolume">
+                    <div>
+                      <div>
+                        <input type="number" [(ngModel)]="valueEdited[0]">
+                        <span class="unit"> ml</span>
+                      </div>
+                      <div style="display: flex;" class="edit-button-container">
+                        <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                          <span class="material-symbols-outlined">check</span>
+                        </button>
+                        <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <!-- PSA Dichte -->
+                <td (contextmenu)="detectClickR($event, exam, toNumber(exam.getPSADensitiy(), 2) + 'ng/ml', '')"
+                  [ngClass]="{'na': isNA(exam.getPSADensitiy())}">
+                  <div class="cell-content">
+                    {{ toNumber(exam.getPSADensitiy(), 2) }}
+                    <span class="unit" *ngIf="!isNA(exam.getPSADensitiy())"> ng/ml²</span>
+                  </div>
+                </td>
+                <!-- button -->
+                <td class="expand">
+                  <div *ngIf="exams.length - 1 > i" (click)="exam.switchCollapse()" class="button">
+                    <span class="material-symbols-outlined" *ngIf="exam.collapsed">chevron_left</span>
+                    <span class="material-symbols-outlined" *ngIf="!exam.collapsed">expand_more</span>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="exams.length - 1 > i && !exam.collapsed" class="difference">
+                <td class="left"> {{ getDifferenceDate(exam.date, exams[i + 1].date) }} </td>
+                <td> {{ getDifference(exam.PSAValue, exams[i + 1].PSAValue, 1, 'ng/ml') }} </td>
+                <td> {{ getDifferenceDate(exam.PSADate, exams[i + 1].PSADate) }}</td>
+                <td> {{ getDifference(exam.ProstateVolume, exams[i + 1].ProstateVolume, 1, 'ml') }} </td>
+                <td>
+                  {{ getDifference(exam.getPSADensitiy(), exams[i + 1].getPSADensitiy(), 2, 'ng/ml²') }}
+                </td>
+                <td></td>
+              </tr>
+            </ng-container>
+            <tr>
+              <td colspan="99" class="buttons">
+                <div class="tile-buttons">
+                  <button (click)="getActiveExam().jumpToProstateSeg()"><span
+                      class="material-symbols-outlined">image</span>Anzeigen</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br>
+      </div>
+    </div>
+    <!-- Befunde -->
+    <div class="flex" [ngClass]="{'checked': progress[2], 'current': progressCurrent == 2}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(2)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[2]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Herdbefunde ({{ lesions.length }})</h1>
+        <!-- Läsionen -->
+        <div *ngFor="let lesion of lesions;  index as j;">
+          <h2 style="position: relative;">
+            <div (click)="lesion.checked = !lesion.checked" class="checkbox small"
+              [ngClass]="{'checked': lesion.checked || progress[3]}">
+              <span class="material-symbols-outlined checker" *ngIf="lesion.checked || progress[2]">check_small</span>
+            </div>
+            Läsion #{{ j + 1 }}
+          </h2>
+          <div class="tile">
+            <table style="border: 1px solid black;">
+              <tr>
+                <th class="left">Datum</th>
+                <th>Region</th>
+                <th>Referenz</th>
+                <th>Max. DM</th>
+                <th>EPE</th>
+                <th>ADC</th>
+                <th>T2W</th>
+                <th>DWI</th>
+                <th>DCE</th>
+                <th>PI-RADS</th>
+              </tr>
+              <ng-container *ngFor="let instance of lesion.instances; index as i;">
+                <!-- lesion -->
+                <tr [ngClass]="{'past': !isActiveLesion(instance), 'active': isActiveLesion(instance)}">
+                  <!-- Datum -->
+                  <td class="left"
+                    (contextmenu)="detectClickR($event, instance, formatDate(getExamDate(instance.examId)), '')">
+                    <div class="cell-content"> {{ getExamDate(instance.examId) | date: 'dd.MM.yyyy'  }} </div>
+                  </td>
+                  <!-- Region -->
+                  <td (contextmenu)="detectClickR($event, instance, getSector(instance), 'lesion-region')"
+                    (dblclick)="detectDblClick(instance, 'lesion-region')"
+                    [ngClass]="{'na': isNAZ(instance.region[0])}">
+                    <div class="cell-content" *ngIf="!instance.editRegion">
+                      {{ getSector(instance) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editRegion">
+                      <div>
+                        <div class="flex">
+                          <select [(ngModel)]="valueEdited[0]">
+                            <option value="-1">N/A</option>
+                            <option value="0">TZ a</option>
+                            <option value="1">TZ p</option>
+                            <option value="2">PZ pm</option>
+                            <option value="3">PZ pl</option>
+                            <option value="4">PZ a</option>
+                            <option value="5">CZ</option>
+                            <option value="6">AFS</option>
+                            <option value="7">SV</option>
+                            <option value="8">US</option>
+                          </select>
+                          <select [(ngModel)]="valueEdited[1]" *ngIf="sectionDisplayed(valueEdited[0])">
+                            <option value="0">basal</option>
+                            <option value="1">mittig</option>
+                            <option value="2">apikal</option>
+                          </select>
+                          <select [(ngModel)]="valueEdited[2]" *ngIf="sideDisplayed(valueEdited[0])">
+                            <option value="0">L</option>
+                            <option value="1">R</option>
+                          </select>
+                        </div>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- Referenz -->
+                  <td (contextmenu)="detectClickR($event, instance, getReference(instance), 'lesion-ref')"
+                    (dblclick)="detectDblClick(instance, 'lesion-ref')"
+                    [ngClass]="{'na': isNA(instance.seriesNr) || isNA(instance.imageNr)}">
+                    <div class="cell-content" *ngIf="!instance.editRef">
+                      {{ getReference(instance) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editRef">
+                      <div>
+                        <div class="flex" style="align-items: center; gap: 3px;">
+                          <span>S:</span>
+                          <input [(ngModel)]="valueEdited[0]" type="number">
+                          <span>B:</span>
+                          <input [(ngModel)]="valueEdited[1]" type="number">
+                          <button class="edit-button-apply-ref" (click)="applyCurrentImageRef()">
+                            <span class="material-symbols-outlined">sheets_rtl</span>
+                          </button>
+                        </div>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- Max. Durchmesser -->
+                  <td (contextmenu)="detectClickR($event, instance, instance.diameter, 'lesion-diameter')"
+                    (dblclick)="detectDblClick(instance, 'lesion-diameter')"
+                    [ngClass]="{'na': isNA(instance.diameter)}">
+                    <div class="cell-content" *ngIf="!instance.editDiameter">
+                      {{ toNumber(instance.diameter, 1) }}
+                      <span class="unit" *ngIf="!isNA(instance.diameter)">mm</span>
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editDiameter">
+                      <div>
+                        <input [(ngModel)]="valueEdited[0]" type="number">
+                        <span class="unit"> mm</span>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- EPE -->
+                  <td (contextmenu)="detectClickR($event, instance, instance.EPE, 'lesion-epe')"
+                    (dblclick)="detectDblClick(instance, 'lesion-epe')" [ngClass]="{'na': isNAZ(instance.EPE)}">
+                    <div class="cell-content" *ngIf="!instance.editEPE"> {{ toBool(instance.EPE) }} </div>
+                    <div class="cell-content" *ngIf="instance.editEPE">
+                      <div>
+                        <select [(ngModel)]="valueEdited[0]">
+                          <option value="-1">N/A</option>
+                          <option value="0">Nein</option>
+                          <option value="1">Ja</option>
+                        </select>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- ADC -->
+                  <td (contextmenu)="detectClickR($event, instance, getADCRange(instance), 'lesion-adc')"
+                    (dblclick)="detectDblClick(instance, 'lesion-adc')"
+                    [ngClass]="{'na': isNA(instance.ADCMin) || isNA(instance.ADCMax)}">
+                    <div class="cell-content" *ngIf="!instance.editADC">
+                      {{ getADCRange(instance) }}
+                      <span class="unit" *ngIf="!isNA(instance.ADCMin) && !isNA(instance.ADCMin)">mm²/s</span>
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editADC">
+                      <div>
+                        <div class="flex" style="align-items: center; gap: 1px;">
+                          <input [(ngModel)]="valueEdited[0]" type="number">
+                          <span>-</span>
+                          <input [(ngModel)]="valueEdited[1]" type="number">
+                          <span class="unit">mm²/s</span>
+                        </div>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- T2W -->
+                  <td (contextmenu)="detectClickR($event, instance, toPIRADS(instance.T2W), 'lesion-t2w')"
+                    (dblclick)="detectDblClick(instance, 'lesion-t2w')" [ngClass]="{'na': isNA(instance.T2W)}">
+                    <div *ngIf="!instance.editT2W" [class]="isNA(instance.T2W) ? 'cell-content' : 'p-score'">
+                      {{ toPIRADS(instance.T2W) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editT2W">
+                      <div>
+                        <select [(ngModel)]="valueEdited[0]">
+                          <option value="-1">N/A</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- DWI -->
+                  <td (contextmenu)="detectClickR($event, instance, toPIRADS(instance.DWI), 'lesion-dwi')"
+                    (dblclick)="detectDblClick(instance, 'lesion-dwi')" [ngClass]="{'na': isNA(instance.DWI)}">
+                    <div *ngIf="!instance.editDWI" [class]="isNA(instance.DWI) ? 'cell-content' : 'p-score'">
+                      {{ toPIRADS(instance.DWI) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editDWI">
+                      <div>
+                        <select [(ngModel)]="valueEdited[0]">
+                          <option value="-1">N/A</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- DCE -->
+                  <td (contextmenu)="detectClickR($event, instance, toDCE(instance.DCE), 'lesion-dce')"
+                    (dblclick)="detectDblClick(instance, 'lesion-dce')" [ngClass]="{'na': isNAZ(instance.DCE)}">
+                    <div *ngIf="!instance.editDCE" [class]="isNAZ(instance.DCE) ? 'cell-content' : 'p-score'">
+                      {{ toDCE(instance.DCE) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editDCE">
+                      <div>
+                        <select [(ngModel)]="valueEdited[0]">
+                          <option value="-1">N/A</option>
+                          <option value="0">-</option>
+                          <option value="1">+</option>
+                        </select>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- PI-RADS -->
+                  <td
+                    (contextmenu)="detectClickR($event, instance, toPIRADS(instance.calculateScore(true)), 'lesion-pirads')"
+                    (dblclick)="detectDblClick(instance, 'lesion-pirads')"
+                    [ngClass]="{'na': isNA(instance.calculateScore(true))}">
+                    <div *ngIf="!instance.editPIRADS"
+                      [class]="isNAZ(instance.calculateScore(true)) ? 'cell-content' : 'p-score'">
+                      {{ toPIRADS(instance.calculateScore(true)) }}
+                    </div>
+                    <div class="cell-content" *ngIf="instance.editPIRADS">
+                      <div>
+                        <select [(ngModel)]="valueEdited[0]">
+                          <option value="-1">N/A</option>
+                          <option value="6">auto ({{ toPIRADS(instance.calculateScore(false)) }})</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <div class="flex edit-button-container">
+                          <button (click)="instance.confirmEdit(valueEdited)" class="edit-button-confirm">
+                            <span class="material-symbols-outlined">check</span>
+                          </button>
+                          <button (click)="instance.cancelEditing()" class="edit-button-cancel">
+                            <span class="material-symbols-outlined">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <!-- Expand -->
+                  <td class="expand">
+                    <div *ngIf="exams.length - 1 > i" (click)="instance.switchCollapse()" class="button">
+                      <span class="material-symbols-outlined" *ngIf="instance.collapsed">chevron_left</span>
+                      <span class="material-symbols-outlined" *ngIf="!instance.collapsed">expand_more</span>
+                    </div>
+                  </td>
+                </tr>
+                <!-- difference -->
+                <tr *ngIf="lesion.instances.length - 1 > i && !instance.collapsed" class="difference">
+                  <td class="left"> {{ getDifferenceDate(exams[i].date, exams[i + 1].date) }} </td>
+                  <td></td>
+                  <td></td>
+                  <td> {{ getDifference(instance.diameter, lesion.instances[i + 1].diameter, 1, 'mm') }} </td>
+                  <td></td>
+                  <td>
+                    {{ getDifferenceRange(instance.ADCMin, lesion.instances[i + 1].ADCMin, instance.ADCMax, lesion.instances[i + 1].ADCMax, 1, 'mm²/s') }}
+                  </td>
+                  <td> {{ getDifference(instance.T2W, lesion.instances[i + 1].T2W, 0, '') }} </td>
+                  <td> {{ getDifference(instance.DWI, lesion.instances[i + 1].DWI, 0, '') }} </td>
+                  <td></td>
+                  <td>
+                    {{ getDifference(instance.calculateScore(true), lesion.instances[i + 1].calculateScore(true), 0, '') }}
+                  </td>
+                  <td></td>
+                </tr>
+              </ng-container>
+              <!-- buttons -->
+              <tr>
+                <td colspan="99" class="buttons">
+                  <div class="tile-buttons">
+                    <button (click)="hideLesion(j)">
+                      <span class="material-symbols-outlined">visibility_off</span>
+                      Ausblenden
+                    </button>
+                    <button (click)="mapLesion()">
+                      <span class="material-symbols-outlined">map</span>
+                      Kartieren
+                    </button>
+                    <button (click)="jumpToLesion(lesion)" *ngIf="lesion.id >= 0">
+                      <span class="material-symbols-outlined"> image</span>
+                      Anzeigen
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tile button-add-lesion" (click)="addNewLesion()">
+          <span class="material-symbols-outlined" style="font-size: 18px;"> add_circle </span>Läsion hinzufügen
+        </div>
+        <!-- Ausgeblendete Läsionen -->
+        <ng-container *ngIf="lesionsHidden.length > 0">
+          <h2 (click)="hiddenLesionsCollapsed = !hiddenLesionsCollapsed" style="cursor: pointer;">
+            <span class="material-symbols-outlined" *ngIf="hiddenLesionsCollapsed">chevron_right</span>
+            <span class="material-symbols-outlined" *ngIf="!hiddenLesionsCollapsed">expand_more</span>
+            Ausgeblendete Befunde ({{ lesionsHidden.length }})
+          </h2>
+          <ng-container *ngIf="!hiddenLesionsCollapsed">
+
+          </ng-container>
+        </ng-container>
+        <br>
+      </div>
+    </div>
+    <!-- Tumorausbreitung -->
+    <div class="flex" [ngClass]="{'checked': progress[3], 'current': progressCurrent == 3}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(3)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[3]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Tumorausbreitung</h1>
+        <div class="tile">
+          <table>
+            <tr>
+              <th class="left">Datum</th>
+              <th>EPE</th>
+              <th>NVB</th>
+              <th>Samenblasen</th>
+              <th>Lymphknoten</th>
+              <th>Knochen</th>
+              <th>Andere</th>
+            </tr>
+            <tr *ngFor="let exam of exams;" [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}">
+              <td class="left" (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
+                <div class="cell-content">{{ exam.date | date: 'dd.MM.yyyy' }}</div>
+              </td>
+              <!-- EPE -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingEPE), 'staging-epe')"
+                (dblclick)="detectDblClick(exam, 'staging-epe')" [ngClass]="{'na': isNAZ(exam.stagingEPE)}">
+                <div class="cell-content" *ngIf="!exam.editStagingEPE">{{ toBool(exam.stagingEPE) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingEPE">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- NVB -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingNVB), 'staging-nvb')"
+                (dblclick)="detectDblClick(exam, 'staging-nvb')" [ngClass]="{'na': isNAZ(exam.stagingNVB)}">
+                <div class="cell-content" *ngIf="!exam.editStagingNVB">{{ toBool(exam.stagingNVB) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingNVB">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- SV -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingSV), 'staging-sv')"
+                (dblclick)="detectDblClick(exam, 'staging-sv')" [ngClass]="{'na': isNAZ(exam.stagingSV)}">
+                <div class="cell-content" *ngIf="!exam.editStagingSV">{{ toBool(exam.stagingSV) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingSV">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- LK -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingLK), 'staging-lk')"
+                (dblclick)="detectDblClick(exam, 'staging-lk')" [ngClass]="{'na': isNAZ(exam.stagingLK)}">
+                <div class="cell-content" *ngIf="!exam.editStagingLK">{{ toBool(exam.stagingLK) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingLK">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- BM -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingBM), 'staging-bm')"
+                (dblclick)="detectDblClick(exam, 'staging-bm')" [ngClass]="{'na': isNAZ(exam.stagingBM)}">
+                <div class="cell-content" *ngIf="!exam.editStagingBM">{{ toBool(exam.stagingBM) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingBM">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- Other -->
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingOther), 'staging-other')"
+                (dblclick)="detectDblClick(exam, 'staging-other')" [ngClass]="{'na': isNAZ(exam.stagingOther)}">
+                <div class="cell-content" *ngIf="!exam.editStagingOther">{{ toBool(exam.stagingOther) }}</div>
+                <div class="cell-content" *ngIf="exam.editStagingOther">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br>
+      </div>
+    </div>
+    <!-- Nebenbefundeprogress -->
+    <div class="flex" [ngClass]="{'checked': progress[4], 'current': progressCurrent == 4}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(4)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[4]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Nebenbefunde</h1>
+        <div class="tile">
+          <table>
+            <tr>
+              <th>Datum</th>
+              <th>BPH</th>
+              <th>Blutungen</th>
+              <th>Zysten</th>
+              <th>Verkalkungen</th>
+              <th>Prostatitis</th>
+              <th>Atrophie</th>
+              <th>Fibrosis</th>
+              <th>Andere</th>
+            </tr>
+            <tr *ngFor="let exam of exams; index as i;"
+              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
+              <td (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
+                <div class="cell-content">
+                  <span>{{exam.date | date: 'dd.MM.yyyy' }}</span>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[0]), 'env-0')"
+                (dblclick)="detectDblClick(exam, 'env-0')" [ngClass]="{'na': isNAZ(exam.environment[0])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[0]">{{ toBool(exam.environment[0]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[0]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[1]), 'env-1')"
+                (dblclick)="detectDblClick(exam, 'env-1')" [ngClass]="{'na': isNAZ(exam.environment[1])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[1]">{{ toBool(exam.environment[1]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[1]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[2]), 'env-2')"
+                (dblclick)="detectDblClick(exam, 'env-2')" [ngClass]="{'na': isNAZ(exam.environment[2])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[2]">{{ toBool(exam.environment[2]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[2]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[3]), 'env-3')"
+                (dblclick)="detectDblClick(exam, 'env-3')" [ngClass]="{'na': isNAZ(exam.environment[3])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[3]">{{ toBool(exam.environment[3]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[3]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[4]), 'env-4')"
+                (dblclick)="detectDblClick(exam, 'env-4')" [ngClass]="{'na': isNAZ(exam.environment[4])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[4]">{{ toBool(exam.environment[4]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[4]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[5]), 'env-5')"
+                (dblclick)="detectDblClick(exam, 'env-5')" [ngClass]="{'na': isNAZ(exam.environment[5])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[5]">{{ toBool(exam.environment[5]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[5]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[6]), 'env-6')"
+                (dblclick)="detectDblClick(exam, 'env-6')" [ngClass]="{'na': isNAZ(exam.environment[6])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[6]">{{ toBool(exam.environment[6]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[6]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[7]), 'env-7')"
+                (dblclick)="detectDblClick(exam, 'env-7')" [ngClass]="{'na': isNAZ(exam.environment[7])}">
+                <div class="cell-content" *ngIf="!exam.editEnvironment[7]">{{ toBool(exam.environment[7]) }}</div>
+                <div class="cell-content" *ngIf="exam.editEnvironment[7]">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">Nein</option>
+                      <option value="1">Ja</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br>
+      </div>
+    </div>
+    <!-- Gesamtscore -->
+    <div class="flex" [ngClass]="{'checked': progress[5], 'current': progressCurrent == 5}">
+      <div class="progress-container flex-collum">
+        <div (click)="checkSection(5)" class="checkbox">
+          <span class="material-symbols-outlined checker" *ngIf="progress[5]">check</span>
+        </div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="section-container">
+        <h1>Gesamtscore</h1>
+        <div class="tile">
+          <table>
+            <tr>
+              <th class="left">Datum</th>
+              <th>PI-RADS</th>
+              <th>PRECISE</th>
+              <th>TNM</th>
+            </tr>
+            <tr *ngFor="let exam of exams;" [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}">
+              <!-- Date -->
+              <td class="left" (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
+                {{ exam.date | date: 'dd.MM.yyyy' }} </td>
+              <!-- PI-RADS -->
+              <td (contextmenu)="detectClickR($event, exam, toPIRADS(exam.PIRADS), 'pirads')"
+                (dblclick)="detectDblClick(exam, 'pirads')" [ngClass]="{'na': isNA(exam.PIRADS)}">
+                <div *ngIf="!exam.editPIRADS" [class]="isNA(exam.PIRADS) ? 'cell-content' : 'p-score'">
+                  {{ toPIRADS(exam.PIRADS) }}
+                </div>
+                <div class="cell-content" *ngIf="exam.editPIRADS">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- PRECISE -->
+              <td (contextmenu)="detectClickR($event, exam, toPIRADS(exam.PRECISE), 'precise')"
+                (dblclick)="detectDblClick(exam, 'precise')" [ngClass]="{'na': isNA(exam.PRECISE)}">
+                <div *ngIf="!exam.editPRECISE" [class]="isNA(exam.PRECISE) ? 'cell-content' : 'p-score'">
+                  {{ toPIRADS(exam.PRECISE) }}
+                </div>
+                <div class="cell-content" *ngIf="exam.editPRECISE">
+                  <div>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <!-- TNM -->
+              <td (contextmenu)="detectClickR($event, exam, exam.getTNM(), 'tnm')"
+                (dblclick)="detectDblClick(exam, 'tnm')" [ngClass]="{'na': isNAZ(exam.TNM[0])}">
+                <div *ngIf="!exam.editTNM" class="cell-content">
+                  {{ exam.getTNM() }}
+                </div>
+                <div class="cell-content" *ngIf="exam.editTNM">
+                  <div>
+                    <span>T:</span>
+                    <select [(ngModel)]="valueEdited[0]">
+                      <option value="-1">N/A</option>
+                      <option value="0">TX</option>
+                      <option value="1">T1</option>
+                      <option value="2">T1a</option>
+                      <option value="3">T1b</option>
+                      <option value="4">T1c</option>
+                      <option value="5">T2</option>
+                      <option value="6">T2a</option>
+                      <option value="7">T2b</option>
+                      <option value="8">T2c</option>
+                      <option value="9">T3</option>
+                      <option value="10">T3a</option>
+                      <option value="11">T3b</option>
+                      <option value="12">T4</option>
+                    </select>
+                    <span> N:</span>
+                    <select [(ngModel)]="valueEdited[1]">
+                      <option value="0">NX</option>
+                      <option value="1">N0</option>
+                      <option value="2">N1</option>
+                    </select>
+                    <span> M:</span>
+                    <select [(ngModel)]="valueEdited[2]">
+                      <option value="0">MX</option>
+                      <option value="1">M0</option>
+                      <option value="2">M1</option>
+                      <option value="3">M1a</option>
+                      <option value="4">M1b</option>
+                      <option value="5">M1c</option>
+                    </select>
+                    <div class="flex edit-button-container">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
+                        <span class="material-symbols-outlined">check</span>
+                      </button>
+                      <button (click)="exam.cancelEditing()" class="edit-button-cancel">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------------------------------------------ Right Side ------------------------------------------------------------------ -->
+  <div class="right">
+    <div class="right-top">
+      <!-- Buttons: Series -->
+      <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+        <ng-container *ngFor="let sequence of getActiveExam().sequences; index as i">
+          <div class="button-image" (click)="getActiveExam().openSequence(i)" [ngClass]="{'active': sequence.active}">
+            <span class="material-symbols-outlined">image</span>
+            {{ sequence.getType() }}
+          </div>
+        </ng-container>
+        <div class="button-image" (click)="getActiveExam().openGraphic()"
+          [ngClass]="{'active': getActiveExam().graphicActive}">
+          <span class="material-symbols-outlined">map</span>
+          Grafik
+        </div>
+      </div>
+      <!-- Buttons: sub options -->
+      <div style="display: flex; gap: 10px; height: 60px;">
+        <!-- masks -->
+        <ng-container *ngIf="!getActiveExam().graphicActive">
+          <div *ngFor="let mask of getActiveExam().getActiveSeries().masks" class="button-mask"
+            (click)="mask.active = !mask.active" [ngClass]="{'active': mask.active}">
+            <span class="material-symbols-outlined" *ngIf="!mask.active">check_box_outline_blank</span>
+            <span class="material-symbols-outlined" *ngIf="mask.active">check_box</span>
+            <span>{{ getMaskName(mask.type) }}</span>
+          </div>
+        </ng-container>
+        <!-- graphic options -->
+        <ng-container *ngIf="getActiveExam().graphicActive">
+          <div class="button-mask" (click)="getActiveExam().toggleGraphicOption(0)"
+            [ngClass]="{'active': getActiveExam().graphicOptions[0]}">
+            <span class="material-symbols-outlined"
+              *ngIf="!getActiveExam().graphicOptions[0]">check_box_outline_blank</span>
+            <span class="material-symbols-outlined" *ngIf="getActiveExam().graphicOptions[0]">check_box</span>
+            <span> Tabelle </span>
+          </div>
+          <div class="button-mask" (click)="getActiveExam().toggleGraphicOption(1)"
+            [ngClass]="{'active': getActiveExam().graphicOptions[1]}">
+            <span class="material-symbols-outlined"
+              *ngIf="!getActiveExam().graphicOptions[1]">check_box_outline_blank</span>
+            <span class="material-symbols-outlined" *ngIf="getActiveExam().graphicOptions[1]">check_box</span>
+            <span> Karte </span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="right-bottom">
+      <!-- image -->
+      <div *ngIf="!getActiveExam().graphicActive"
+        style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+        <ng-container *ngFor="let sequence of getActiveExam().sequences">
+          <div class="image-containter" *ngIf="sequence.active">
+            <div
+              style="display: flex; justify-content: center; align-items: center; font-weight: bold; color: darkgrey;">
+              R</div>
+            <div (wheel)="scrollImages($event)" class="image" style="position: relative;">
+              <img src="{{ getActiveExam().getActiveImagePath() }}">
+              <ng-container *ngFor="let mask of getActiveExam().getActiveSeries().masks">
+                <img src="{{ mask.paths[getActiveExam().getActiveSeries().currentIndex] }}" class="mask"
+                  *ngIf="mask.active"
+                  [ngClass]="{'prostate': mask.type == 0, 'pz': mask.type == 1, 'lesion': mask.type == 2}">
+              </ng-container>
+              <div style="position: absolute; top: 15px; left: 50%; transform: translateX(-50%);">
+                Serie: {{ getActiveExam().getActiveSeries().seriesNr }}, Bild:
+                {{ getActiveExam().getActiveSeries().currentIndex + 1}}/{{ getActiveExam().getActiveSeries().paths.length }}
+              </div>
+              <div class="sequence-button-container">
+                <button><span class="material-symbols-outlined">content_copy</span>Kopieren</button>
+                <button><span class="material-symbols-outlined">Send</span>PACS schicken</button>
+                <button><span class="material-symbols-outlined">download</span>Herunterladen</button>
+              </div>
+            </div>
+            <!-- numbers -->
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px;"
+              (wheel)="scrollImages($event)">
+              <div *ngFor="let image of getActiveExam().getActiveSeries().paths; index as i;" [ngClass]="{'selected': i == getActiveExam().getActiveSeries().currentIndex, 
+                'segmentation': getActiveExam().getActiveSeries().getSliceState(i) == 1, 
+                'lesion': getActiveExam().getActiveSeries().getSliceState(i) == 2}" class="slice"
+                (click)="getActiveExam().getActiveSeries().currentIndex = i">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- Grafik -->
+      <div *ngIf="getActiveExam().graphicActive"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center; object-fit: contain;">
+        <!-- Combination -->
+        <div
+          style="display: flex; background-color: white; position: relative; margin-bottom: 50px; min-height: 280px; min-width: 200px;">
+          <!-- Table -->
+          <div style="display: flex; aspect-ratio: 100/141; max-height: 60vh; max-width: 23vw; width: 100vw;"
+            *ngIf="getActiveExam().graphicOptions[0]">
+            <div style="margin: 20px;">
+              <!-- Patient -->
+              <div class="heading">Untersuchung</div>
+              <table class="table-invisible">
+                <tr>
+                  <td>Datum:</td>
+                  <td class="emphasized"> {{ getActiveExam().date  | date: 'dd.MM.yyyy'  }} </td>
+                </tr>
+                <tr>
+                  <td>Patient:</td>
+                  <td class="emphasized"> {{ patient.surname }}, {{ patient.name }}
+                    ({{ getBirthdate() | date: 'dd.MM.yyyy' }}) </td>
+                </tr>
+              </table>
+              <!-- Image Quality -->
+              <div class="heading">Bildqualität</div>
+              <table class="table-invisible">
+                <tr>
+                  <td>T2W von diag. Qualität:</td>
+                  <td class="emphasized"> {{ toBool( getActiveExam().imageQuality[0])  }} </td>
+                </tr>
+                <tr>
+                  <td>DWI von diag. Qualität:</td>
+                  <td class="emphasized"> {{ toBool( getActiveExam().imageQuality[1]) }}</td>
+                </tr>
+                <tr>
+                  <td>DCE von diag. Qualität:</td>
+                  <td class="emphasized"> {{ toBool( getActiveExam().imageQuality[2]) }}</td>
+                </tr>
+                <tr *ngIf="!isNA(getActiveExam().imageQuality[3])">
+                  <td>PI-QUAL Score:</td>
+                  <td class="emphasized"> {{ getActiveExam().imageQuality[3] }} </td>
+                </tr>
+              </table>
+              <!-- Prostata -->
+              <div class="heading">Prostatamessungen</div>
+              <table class="table-invisible">
+                <tr>
+                  <td>PSA-Wert:</td>
+                  <td class="emphasized">
+                    {{ toNumber(getActiveExam().PSAValue, 1) }}
+                    <span *ngIf="!isNA(getActiveExam().PSAValue)"> ng/ml
+                      <span
+                        *ngIf="getActiveExam().PSADate != ''">({{ getActiveExam().PSADate | date: 'dd.MM.yyyy' }})</span></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Volum:</td>
+                  <td class="emphasized">{{ toNumber(getActiveExam().ProstateVolume, 1) }}
+                    <span *ngIf="!isNA(getActiveExam().ProstateVolume)"> ml</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>PSA-Dichte:</td>
+                  <td class="emphasized">{{ toNumber(getActiveExam().getPSADensitiy(), 2) }}
+                    <span *ngIf="!isNA(getActiveExam().getPSADensitiy())"> ng/ml²</span>
+                  </td>
+                </tr>
+              </table>
+              <!-- Herde -->
+              <div class="heading">Fokale Prostataherde</div>
+              <div *ngIf="lesions.length == 0">keine</div>
+              <table style="border: 1px solid black; width: 100%;" class="grafic-table" *ngIf="lesions.length > 0">
+                <tr>
+                  <th>Region</th>
+                  <th>Bild</th>
+                  <th>Max. DM</th>
+                  <th>EPE</th>
+                  <th>ADC</th>
+                  <th>T2W</th>
+                  <th>DWI</th>
+                  <th>DCE</th>
+                  <th>PI-RADS</th>
+                </tr>
+                <tr *ngFor="let lesion of lesions">
+                  <td> {{ getSector(getActiveInstance(lesion)) }} </td>
+                  <td> {{ getReference(getActiveInstance(lesion)) }} </td>
+                  <td> {{ toNumber(getActiveInstance(lesion).diameter, 1) }} <span
+                      *ngIf="!isNA(getActiveInstance(lesion).diameter)"> mm</span></td>
+                  <td> {{ toBool(getActiveInstance(lesion).EPE) }} </td>
+                  <td> {{ getADCRange(getActiveInstance(lesion)) }} <span
+                      *ngIf="!isNAZ(getActiveInstance(lesion).ADCMin)"> mm²/s</span></td>
+                  <td> {{ toPIRADS(getActiveInstance(lesion).T2W) }} </td>
+                  <td> {{ toPIRADS(getActiveInstance(lesion).DWI) }} </td>
+                  <td> {{ toDCE(getActiveInstance(lesion).DCE) }} </td>
+                  <td> {{ toPIRADS(getActiveInstance(lesion).calculateScore(true)) }} </td>
+                </tr>
+              </table>
+              <!-- two -->
+              <div class="flex">
+                <!-- Tumorausbreitung -->
+                <div *ngIf="getActiveExam().stagingActive()" style="flex: 1;">
+                  <div class="heading">Tumorausbreitung</div>
+                  <div *ngIf="!getActiveExam().stagingActive()">keine</div>
+                  <table class="table-invisible">
+                    <tr *ngIf="getActiveExam().stagingEPE >= 0">
+                      <td>Extrakapsuläre Ausdehnung:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingEPE) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().stagingNVB >= 0">
+                      <td>Neurovaskuläres Bündel:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingNVB) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().stagingSV >= 0">
+                      <td>Samenblasen:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingSV) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().stagingLK >= 0">
+                      <td>Lymphknoten:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingLK) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().stagingBM >= 0">
+                      <td>Knochen:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingBM) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().stagingOther >= 0">
+                      <td>Andere Organe:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().stagingOther) }}</td>
+                    </tr>
+                  </table>
+                </div>
+                <!-- Umgebung -->
+                <div *ngIf="getActiveExam().environmentActive()" style="flex: 1;">
+                  <div class="heading">Umgebung</div>
+                  <table class="table-invisible">
+                    <tr *ngIf="getActiveExam().environment[0] >= 0">
+                      <td>Benigne Prostatahyperplasie:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[0]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[1] >= 0">
+                      <td>Blutungen:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[1]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[2] >= 0">
+                      <td>Zysten:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[2]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[3] >= 0">
+                      <td>Verkalkungen:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[3]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[4] >= 0">
+                      <td>Prostatitis:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[4]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[5] >= 0">
+                      <td>Atrophie:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[5]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[6] >= 0">
+                      <td>Fibrosis:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[6]) }}</td>
+                    </tr>
+                    <tr *ngIf="getActiveExam().environment[7] >= 0">
+                      <td>Nebenbefunde:</td>
+                      <td class="emphasized">{{ toBool(getActiveExam().environment[7]) }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+              <!-- Gesamtscore -->
+              <div class="heading">Gesamtscore</div>
+              <table class="table-invisible">
+                <tr *ngIf="getActiveExam().PIRADS >= 0">
+                  <td>PI-RADS:</td>
+                  <td class="emphasized">{{ toPIRADS(getActiveExam().PIRADS) }}</td>
+                </tr>
+                <tr *ngIf="getActiveExam().PRECISE >= 0">
+                  <td>PRECISE:</td>
+                  <td class="emphasized">{{ toPIRADS(getActiveExam().PRECISE) }}</td>
+                </tr>
+                <tr *ngIf="getActiveExam().TNM[0] >= 0">
+                  <td>TNM:</td>
+                  <td class="emphasized">{{ getActiveExam().getTNM() }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- Map -->
+          <div
+            style="display: flex; align-items: center; justify-content: center; aspect-ratio: 100/141; position: relative;"
+            *ngIf="getActiveExam().graphicOptions[1]">
+            <img src="..\assets\images\Map.png" style="max-height: 60vh; max-width: 23vw;">
+            <ng-container *ngFor="let marker of getActiveExam().markers">
+              <img src="{{marker.path}}" class="" *ngIf="findLesion({'id': marker.lesionID}) != -1"
+                style="max-height: 60vh; max-width: 23vw; position: absolute;">
+            </ng-container>
+          </div>
+          <!-- Buttons -->
+          <div class="sequence-button-container" style="display: flex;">
+            <button><span class="material-symbols-outlined">content_copy</span>Kopieren</button>
+            <button><span class="material-symbols-outlined">Send</span>PACS schicken</button>
+            <button><span class="material-symbols-outlined">download</span>Herunterladen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<router-outlet></router-outlet>
+
+<div class="contextMenu" [ngStyle]="contextMenuStyle" (clickOutside)="closeContextMenu()">
+  <div class="contextMenu-option" (click)="copyValue()">
+    <span class="material-symbols-outlined">content_copy</span>
+    <span>Kopieren</span>
+  </div>
+  <div class="contextMenu-option" (click)="editValue()" *ngIf="valueName">
+    <span class="material-symbols-outlined">edit</span>
+    <span>Bearbeiten</span>
+  </div>
+</div>

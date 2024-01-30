@@ -1,0 +1,15 @@
+[
+    {
+        "ID": 0,
+        "name": "Dieter",
+        "surname": "Müller-Meyer-Schmidt",
+        "birthdate": "1970-11-07T00:00:00.000Z"
+    },
+    {
+        "ID": 1,
+        "name": "Max",
+        "surname": "Mustermann",
+        "birthdate": "1956-08-14T00:00:00.000Z"
+        
+    }
+]

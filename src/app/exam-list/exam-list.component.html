@@ -1,0 +1,41 @@
+<!-- header -->
+<div class="header">
+  <div class="header-left">
+  </div>
+  <div class="header-center">
+  </div>
+  <div class="header-right">
+    <span class="material-symbols-outlined">account_circle</span>
+  </div>
+</div>
+<!-- bottom -->
+<div class="bottom">
+  <div class="tile">
+    <div class="search">
+      <span class="material-symbols-outlined" style="font-size: 16px;">search</span>
+      <input type="text" [(ngModel)]="searchInput" placeholder="Suchen">
+    </div>
+    <table>
+      <tr>
+        <th>Untersuchung</th>
+        <th>Paitent</th>
+        <th>Status</th>
+      </tr>
+      <tr *ngFor="let exam of exams;" (click)="openExamDetails(exam.ID)">
+        <td>
+          <div class="emphasized">{{ exam.date | date: 'dd.MM.yyyy' }}</div>
+          <div class="extra-info">{{ exam.date | date: 'HH:mm' }}</div>
+        </td>
+        <td>
+          <div class="emphasized">{{ getPatientFromExam(exam).surname }}, {{ getPatientFromExam(exam).name }}</div>
+          <div class="extra-info" style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+            <span>{{ getPatientFromExam(exam).birthdate | date: 'dd.MM.yyyy' }}</span>
+            <span>-</span>
+            <span class="material-symbols-outlined" style="font-size: 16px;">male</span>
+          </div>
+        </td>
+        <td>Bereit</td>
+      </tr>
+    </table>
+  </div>
+</div>

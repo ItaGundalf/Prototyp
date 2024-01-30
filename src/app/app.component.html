@@ -1,0 +1,5 @@
+<app-exam-list *ngIf="!pageDetails" (switchScreen)="onSwitchScreen($event)"
+  (contextmenu)="preventDefaultContextMenu($event)">
+</app-exam-list>
+<app-exam-details *ngIf="pageDetails" (switchScreen)="onSwitchScreen($event)"
+  (contextmenu)="preventDefaultContextMenu($event)"></app-exam-details>

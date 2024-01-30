@@ -1,0 +1,69 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+:root {
+  --color-background: #525252;
+  --color-tile-background: #636363;
+  --color-tile-background-hl: #818080;
+  --color-tile-background-hl-2: #898989;
+  --color-tile-background-hl-3: #6b6b6b;
+  --color-tile-border: #9F9D9D;
+  --color-tile-font-2nd: #c9c9c9;
+  --color-tile-font-3rd: rgba(255, 255, 255, 0.3);
+  --color-heading: #a0a0a0;
+  --color-heading-checked: #a0a0a0;
+  --color-button-confirm: rgb(50, 90, 50);
+  --color-button-confirm-hover: rgb(30, 130, 30);
+  --color-button-cancel: rgb(90, 50, 50);
+  --color-button-cancel-hover: rgb(130, 30, 30);
+  --color-button-lesion: rgb(87, 87, 87);
+  --color-button-lesion-hover: rgb(62, 113, 179);
+  --color-context-menu-background: rgb(200, 200, 200);
+  --color-context-menu-font: rgb(15, 15, 15);
+  --color-progress-bar-border: rgb(122, 122, 122);
+  --color-progress-bar-fill: #5f5f5f;
+  --color-progress-bar-fill-checked: #808080;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto";
+    color: white;
+    background-color: var(--color-background);
+    user-select: none;
+  }
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-collum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background-color: #5f5f5f; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #777; 
+  border-radius: 8px;
+}

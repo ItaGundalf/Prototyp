@@ -1,0 +1,51 @@
+[
+    {
+        "firstName": "Max",
+        "surName": "Müller-Meyer-Schmidt",
+        "birthdate": "1952-11-07T00:00:00.000Z",
+        "exams": [
+            {
+                "date": "2023-05-01T00:00:00.000Z",
+                "sequences": [
+                    {
+                        "name": "T2W",
+                        "series": 15,
+                        "images": [
+                            ""
+                        ]
+                    }
+                ],
+                "masks": [
+                    {
+                        "name": ""
+                    }
+                ],
+                "PSA-Value": "",
+                "PSA-Date": "",
+                "ProstateVolume": "",
+                "lesions": [
+                    {
+                        "index": 0,
+                        "region": "PZpm Mittig R",
+                        "reference": "S14, B15",
+                        "diameter": 9,
+                        "EPE": false, 
+                        "ADC-min": 1.5,
+                        "ADC-max": 2.5,
+                        "T2W": 3,
+                        "DWI": 3,
+                        "DCE": false,
+                        "PI-RADS": 3,
+                        "hidden": false
+                    }
+                
+                ],
+                "stagingEPE": false,
+                "stagingSV": false,
+                "stagingLK": false,
+                "stagingBM": false,
+                "PI-RADS": 3
+            }
+        ]
+    }
+]
