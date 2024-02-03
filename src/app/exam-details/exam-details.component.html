@@ -172,7 +172,7 @@
                 <td (contextmenu)="detectClickR($event, exam, exam.PSAValue, 'psa-value')"
                   (dblclick)="detectDblClick(exam, 'psa-value')" [ngClass]="{'na': isNA(exam.PSAValue)}">
                   <div class="cell-content" *ngIf="!exam.editPSA">
-                    <span> {{ toNumber(exam.PSAValue, 1) }} </span>
+                    <span [ngClass]="{'warning-2': exam.PSAValue >= 4 && exam.PSAValue < 100, 'warning-1': exam.PSAValue >= 100}"> {{ toNumber(exam.PSAValue, 1) }} </span>
                     <span class="unit" *ngIf="!isNA(exam.PSAValue)"> ng/ml</span>
                   </div>
                   <div class="cell-content" *ngIf="exam.editPSA">
@@ -1213,8 +1213,8 @@
             <!-- numbers -->
             <div style="display: flex; flex-direction: column; justify-content: center; gap: 5px;"
               (wheel)="scrollImages($event)">
-              <div *ngFor="let image of getActiveExam().getActiveSeries().paths; index as i;" [ngClass]="{'selected': i == getActiveExam().getActiveSeries().currentIndex, 
-                'segmentation': getActiveExam().getActiveSeries().getSliceState(i) == 1, 
+              <div *ngFor="let image of getActiveExam().getActiveSeries().paths; index as i;" [ngClass]="{'selected': i == getActiveExam().getActiveSeries().currentIndex,
+                'segmentation': getActiveExam().getActiveSeries().getSliceState(i) == 1,
                 'lesion': getActiveExam().getActiveSeries().getSliceState(i) == 2}" class="slice"
                 (click)="getActiveExam().getActiveSeries().currentIndex = i">
               </div>
