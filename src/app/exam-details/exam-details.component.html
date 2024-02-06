@@ -216,7 +216,7 @@
                 <td (contextmenu)="detectClickR($event, exam, exam.ProstateVolume, 'prostate-volume')"
                   (dblclick)="detectDblClick(exam, 'prostate-volume')" [ngClass]="{'na': isNA(exam.ProstateVolume)}">
                   <div class="cell-content" *ngIf="!exam.editProstateVolume">
-                    {{ toNumber(exam.ProstateVolume, 1) }}
+                    <span> {{ toNumber(exam.ProstateVolume, 1) }} </span>
                     <span class="unit" *ngIf="!isNA(exam.ProstateVolume)"> ml</span>
                   </div>
                   <div class="cell-content" *ngIf="exam.editProstateVolume">
@@ -240,7 +240,7 @@
                 <td (contextmenu)="detectClickR($event, exam, toNumber(exam.getPSADensitiy(), 2) + 'ng/ml', '')"
                   [ngClass]="{'na': isNA(exam.getPSADensitiy())}">
                   <div class="cell-content">
-                    {{ toNumber(exam.getPSADensitiy(), 2) }}
+                    <span [ngClass]="{'warning-2': exam.getPSADensitiy() >= 0.15}">{{ toNumber(exam.getPSADensitiy(), 2) }}</span>
                     <span class="unit" *ngIf="!isNA(exam.getPSADensitiy())"> ng/ml²</span>
                   </div>
                 </td>
