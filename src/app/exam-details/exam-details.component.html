@@ -216,7 +216,8 @@
                 <td (contextmenu)="detectClickR($event, exam, exam.ProstateVolume, 'prostate-volume')"
                   (dblclick)="detectDblClick(exam, 'prostate-volume')" [ngClass]="{'na': isNA(exam.ProstateVolume)}">
                   <div class="cell-content" *ngIf="!exam.editProstateVolume">
-                    <span> {{ toNumber(exam.ProstateVolume, 1) }} </span>
+                    <span [ngClass]="{'warning-1': exam.ProstateVolume >= 500}">
+                      {{ toNumber(exam.ProstateVolume, 1) }} </span>
                     <span class="unit" *ngIf="!isNA(exam.ProstateVolume)"> ml</span>
                   </div>
                   <div class="cell-content" *ngIf="exam.editProstateVolume">
