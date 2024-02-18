@@ -124,13 +124,21 @@ export class ExamDetailsComponent implements OnInit {
     return -1;
   }
 
-  public scrollImages(event: WheelEvent) {
-    if (event.deltaY > 0) {
-      this.getActiveExam().nextImage();
-    } else {
-      this.getActiveExam().previousImage();
+  public scrollImages(event: WheelEvent | KeyboardEvent) {
+    if (event instanceof WheelEvent) {
+        if (event.deltaY > 0) {
+            this.getActiveExam().nextImage();
+        } else {
+            this.getActiveExam().previousImage();
+        }
+    } else if (event instanceof KeyboardEvent) {
+        if (event.code === 'ArrowDown') {
+            this.getActiveExam().nextImage();
+        } else if (event.code === 'ArrowUp') {
+            this.getActiveExam().previousImage();
+        }
     }
-  }
+}
 
   getActiveExam() {
     for (let i = 0; this.exams.length; i++) {
