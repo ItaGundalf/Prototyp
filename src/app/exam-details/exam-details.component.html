@@ -656,7 +656,7 @@
               <th>Samenblasen</th>
               <th>Lymphknoten</th>
               <th>Knochen</th>
-              <th>Zusätzliche Informationen</th>
+              <th>Beschreibung</th>
             </tr>
             <tr *ngFor="let exam of exams;" [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}">
               <td class="left" (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
@@ -775,12 +775,12 @@
               <!-- Other -->
               <td (contextmenu)="detectClickR($event, exam, toBool(exam.stagingOther), 'staging-other')"
                 (dblclick)="detectDblClick(exam, 'staging-other')" [ngClass]="{'na': isNAZ(exam.stagingOther)}">
-                <div class="cell-content" *ngIf="!exam.editStagingOther">{{ toBool(exam.stagingOther) }}</div>
+                <div class="cell-content" *ngIf="!exam.editStagingOther">{{ (exam.stagingOther) }}</div>
                 <div class="cell-content" *ngIf="exam.editStagingOther">
                   <div>
-                    <textarea [(ngModel)]="valueEditedB[0]" type="text"></textarea>
+                    <textarea [(ngModel)]="valueEdited[0]" type="text"></textarea>
                     <div class="flex edit-button-container">
-                      <button (click)="exam.confirmEdit(valueEditedB)" class="edit-button-confirm">
+                      <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
                         <span class="material-symbols-outlined">check</span>
                       </button>
                       <button (click)="exam.cancelEditing()" class="edit-button-cancel">
@@ -817,7 +817,7 @@
               <th>Prostatitis</th>
               <th>Atrophie</th>
               <th>Fibrosis</th>
-              <th>Zusätzliche Informationen</th>
+              <th>Beschreibung</th>
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
               [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
@@ -973,15 +973,15 @@
                   </div>
                 </div>
               </td>
-              <td (contextmenu)="detectClickR($event, exam, toBool(exam.environment[7]), 'env-7')"
-                (dblclick)="detectDblClick(exam, 'env-7')" [ngClass]="{'na': isNAZ(exam.environment[7])}">
-                <div class="cell-content" *ngIf="!exam.editEnvironment[7]">{{ toBool(exam.environment[7]) }}</div>
-                <div class="cell-content" *ngIf="exam.editEnvironment[7]">
+              <td (contextmenu)="detectClickR($event, exam, toBool(exam.other), 'other')"
+                (dblclick)="detectDblClick(exam, 'other')" [ngClass]="{'na': isNAZ(exam.other)}">
+                <div class="cell-content" *ngIf="!exam.editOther">{{ (exam.other) }}</div>
+                <div class="cell-content" *ngIf="exam.editOther">
                   <div>
-                    <textarea [(ngModel)]="valueEditedB[0]" type="text"></textarea>
+                    <textarea [(ngModel)]="valueEdited[0]" type="text"></textarea>
                     <div class="flex edit-button-container">
                       <button (click)="exam.confirmEdit(valueEdited)" class="edit-button-confirm">
-                        <span class="material-symbols-outlined">check</span>
+                                  <span class="material-symbols-outlined">check</span>
                       </button>
                       <button (click)="exam.cancelEditing()" class="edit-button-cancel">
                         <span class="material-symbols-outlined">close</span>
@@ -1339,9 +1339,9 @@
                       <td>Knochen:</td>
                       <td class="emphasized">{{ toBool(getActiveExam().stagingBM) }}</td>
                     </tr>
-                    <tr *ngIf="getActiveExam().stagingOther >= 0">
-                      <td>Andere Organe:</td>
-                      <td class="emphasized">{{ toBool(getActiveExam().stagingOther) }}</td>
+                    <tr *ngIf="getActiveExam().stagingOther.trim().length > 0">
+                      <td>Beschreibung:</td>
+                      <td class="emphasized">{{ (getActiveExam().stagingOther) }}</td>
                     </tr>
                   </table>
                 </div>
@@ -1377,9 +1377,9 @@
                       <td>Fibrosis:</td>
                       <td class="emphasized">{{ toBool(getActiveExam().environment[6]) }}</td>
                     </tr>
-                    <tr *ngIf="getActiveExam().environment[7] >= 0">
-                      <td>Nebenbefunde:</td>
-                      <td class="emphasized">{{ toBool(getActiveExam().environment[7]) }}</td>
+                    <tr *ngIf="getActiveExam().other.trim().length > 0">
+                      <td>Beschreibung:</td>
+                      <td class="emphasized">{{ (getActiveExam().other) }}</td>
                     </tr>
                   </table>
                 </div>

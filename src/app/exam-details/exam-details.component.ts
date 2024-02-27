@@ -454,6 +454,7 @@ export class ExamDetailsComponent implements OnInit {
       case "staging-lk": this.valueEdited = [p.stagingLK]; p.editStagingLK = true; break;
       case "staging-bm": this.valueEdited = [p.stagingBM]; p.editStagingBM = true; break;
       case "staging-other": this.valueEdited = [p.stagingOther]; p.editStagingOther = true; break;
+      case "other": this.valueEdited = [p.other]; p.editOther = true; break;
       case "env-0": this.valueEdited = [p.environment[0]]; p.editEnvironment[0] = true; break;
       case "env-1": this.valueEdited = [p.environment[1]]; p.editEnvironment[1] = true; break;
       case "env-2": this.valueEdited = [p.environment[2]]; p.editEnvironment[2] = true; break;
@@ -565,12 +566,13 @@ class Exam {
   lesions: any[];
   imageQuality: number[];
   environment: number[];
+  other: string;
   stagingEPE: number;
   stagingSV: number;
   stagingLK: number;
   stagingBM: number;
   stagingNVB: number;
-  stagingOther: number;
+  stagingOther: string;
   PIRADS: number;
   PRECISE: number;
   TNM: number[];
@@ -591,6 +593,7 @@ class Exam {
   editStagingBM: boolean = false;
   editStagingNVB: boolean = false;
   editStagingOther: boolean = false;
+  editOther: boolean = false;
 
   constructor(exam: any) {
     this.ID = exam.ID;
@@ -603,6 +606,7 @@ class Exam {
     this.lesions = exam.lesions;
     this.imageQuality = exam.imageQuality;
     this.environment = exam.environment;
+    this.other = exam.other;
     this.stagingEPE = exam.stagingEPE;
     this.stagingSV = exam.stagingSV;
     this.stagingLK = exam.stagingLK;
@@ -689,7 +693,7 @@ class Exam {
   }
 
   stagingActive() {
-    if (this.stagingEPE >= 0 || this.stagingNVB >= 0 || this.stagingSV >= 0 || this.stagingLK >= 0 || this.stagingBM >= 0 || this.stagingOther >= 0) return true;
+    if (this.stagingEPE >= 0 || this.stagingNVB >= 0 || this.stagingSV >= 0 || this.stagingLK >= 0 || this.stagingBM >= 0 || this.stagingOther.trim().length > 0) return true;
     else return false;
   }
 
@@ -744,12 +748,14 @@ class Exam {
     this.editProstateVolume = false;
     this.editImageQuality = [false, false, false, false];
     this.editEnvironment = [false, false, false, false, false, false, false, false];
+    this.editOther = false;
     this.editStagingEPE = false;
     this.editStagingNVB = false;
     this.editStagingSV = false;
     this.editStagingLK = false;
     this.editStagingBM = false;
     this.editStagingOther = false;
+    this.editOther = false;
     this.editPIRADS = false;
     this.editPRECISE = false;
     this.editTNM = false;
@@ -765,6 +771,7 @@ class Exam {
     else if (this.editStagingLK) this.stagingLK = newValue[0];
     else if (this.editStagingBM) this.stagingBM = newValue[0];
     else if (this.editStagingOther) this.stagingOther = newValue[0];
+    else if (this.editOther) this.other = newValue[0];
     else if (this.editPIRADS) this.PIRADS = newValue[0];
     else if (this.editPRECISE) this.PRECISE = newValue[0];
     else if (this.editTNM) this.TNM = [newValue[0], newValue[1], newValue[2]];
