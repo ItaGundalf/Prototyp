@@ -18,7 +18,7 @@ export class ExamDetailsComponent implements OnInit {
   lesions: Lesion[] = [];
   lesionsHidden: Lesion[] = [];
   hiddenLesionsCollapsed: boolean = true;
-  progress: boolean[] = [false, false, false, false, false, false];
+  progress: boolean[] = [false, false, false, false, false, false, false];
   progressCurrent: number = 0;
   contextMenuStyle: any = { 'display': 'none' };
   valueToCopy: string = "";
@@ -28,6 +28,8 @@ export class ExamDetailsComponent implements OnInit {
   valueEdited: number[] = [];
   valueEditedB: string[] = [];
   valueParent: any = null;
+
+  selectedMainLesion: number = 1;
 
 
   constructor(private dataService: PatientsService) { }
@@ -60,6 +62,8 @@ export class ExamDetailsComponent implements OnInit {
       }
     }
   }
+
+
 
   updateLesions() {
     for (let i = 0; i < this.exams.length; i++) {

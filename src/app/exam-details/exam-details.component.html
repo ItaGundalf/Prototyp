@@ -38,7 +38,7 @@
               <th>PI-QUAL</th>
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
-              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">pm 
+              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">pm
               <!-- Date -->
               <td (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
                 <div class="cell-content">
@@ -631,9 +631,21 @@
             Ausgeblendete Befunde ({{ lesionsHidden.length }})
           </h2>
           <ng-container *ngIf="!hiddenLesionsCollapsed">
-
           </ng-container>
         </ng-container>
+        <!-- Hauptläsion Dropdown-Menü -->
+        <div class="section-container">
+          <h2 style="position: relative;">
+            <div (click)="checkSection(2)" class="checkbox small">
+              <span class="material-symbols-outlined checker" *ngIf="progress[2]">check_small</span>
+            </div>
+            <div class="progress-bar"></div>
+            Hauptläsion
+          </h2>
+          <select [(ngModel)]="selectedMainLesion">
+            <option *ngFor="let lesion of lesions; let i = index" [value]="i + 1">Läsion #{{ i + 1 }}</option>
+          </select>
+        </div>
         <br>
       </div>
     </div>
