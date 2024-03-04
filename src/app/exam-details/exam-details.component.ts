@@ -30,6 +30,12 @@ export class ExamDetailsComponent implements OnInit {
   valueParent: any = null;
 
   selectedMainLesion: number = 1;
+  selectedMainLesionChecked: boolean = false; // Variable für den Status der Hauptläsion
+
+  toggleSelectedMainLesion() {
+    this.selectedMainLesionChecked = !this.selectedMainLesionChecked;
+  }
+
 
 
   constructor(private dataService: PatientsService) { }
@@ -142,6 +148,8 @@ export class ExamDetailsComponent implements OnInit {
             this.getActiveExam().previousImage();
         }
     }
+
+
 }
 
   getActiveExam() {
@@ -540,6 +548,7 @@ export class ExamDetailsComponent implements OnInit {
     });
   }
 
+  protected readonly TargetLesion = TargetLesion;
 }
 
 class Patient {
@@ -817,6 +826,10 @@ class Lesion {
   public addEmpty() {
     this.instances.push(new LesionInstance(false));
   }
+}
+
+class TargetLesion{
+  checked: boolean = false;
 }
 
 class LesionInstance {

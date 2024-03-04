@@ -636,8 +636,9 @@
         <!-- Hauptläsion Dropdown-Menü -->
         <div class="section-container">
           <h2 style="position: relative;">
-            <div (click)="checkSection(2)" class="checkbox small">
-              <span class="material-symbols-outlined checker" *ngIf="progress[2]">check_small</span>
+            <div (click)="toggleSelectedMainLesion()" class="checkbox small"
+                 [ngClass]="{'checked': selectedMainLesionChecked || progress[3]}">
+              <span class="material-symbols-outlined checker" *ngIf="selectedMainLesionChecked || progress[2]">check_small</span>
             </div>
             <div class="progress-bar"></div>
             Hauptläsion
