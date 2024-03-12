@@ -28,8 +28,10 @@ export class ExamDetailsComponent implements OnInit {
   valueEdited: number[] = [];
   valueEditedB: string[] = [];
   valueParent: any = null;
+  isContentHiddenMessung: boolean = false;
   isContentHiddenT: boolean = false;
   isContentHidden: boolean = false;
+  isContentHiddenGesamtscore: boolean = false;
   selectedMainLesion: number = 1;
   selectedMainLesionChecked: boolean = false; // Variable für den Status der Hauptläsion
 
@@ -70,6 +72,10 @@ export class ExamDetailsComponent implements OnInit {
     }
   }
 
+  toggleContentMessung(event: MouseEvent) {
+    event.stopPropagation(); // Stoppt die Propagierung des Ereignisses
+    this.isContentHiddenMessung = !this.isContentHiddenMessung;
+  }
 
   toggleContentTumor(event: MouseEvent) {
     event.stopPropagation(); // Stoppt die Propagierung des Ereignisses
@@ -79,6 +85,11 @@ export class ExamDetailsComponent implements OnInit {
   toggleContentNeben(event: MouseEvent) {
     event.stopPropagation(); // Stoppt die Propagierung des Ereignisses
     this.isContentHidden = !this.isContentHidden;
+  }
+
+  toggleContentGesamtscore(event: MouseEvent) {
+    event.stopPropagation(); // Stoppt die Propagierung des Ereignisses
+    this.isContentHiddenGesamtscore = !this.isContentHiddenGesamtscore;
   }
 
   updateLesions() {
