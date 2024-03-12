@@ -31,11 +31,11 @@
         <div class="tile">
           <table>
             <tr>
-              <th>Datum</th>
-              <th>T2W</th>
-              <th>DWI</th>
-              <th>DCE</th>
-              <th>PI-QUAL</th>
+              <th class="userinput">Datum</th>
+              <th class="userinput">T2W</th>
+              <th class="userinput">DWI</th>
+              <th class="userinput">DCE</th>
+              <th class="userinput">PI-QUAL</th>
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
               [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">pm
@@ -151,15 +151,21 @@
         <div class="progress-bar"></div>
       </div>
       <div class="section-container">
-        <h1>Prostata Messungen</h1>
+        <h1 class="head1">Prostata Messungen
+          <div (click)="toggleContentMessung($event)" class="toggle-button">
+            <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
+          </div>
+        </h1>
+        <div class="section-container1" [ngClass]="{'hidden': isContentHiddenMessung}">
+        <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
         <div class="tile">
           <table>
             <tr>
               <th class="left">Untersuchung vom</th>
-              <th>PSA Wert <img src="..\assets\images\Artboard1.svg" width="7%"></th>
-              <th>PSA Datum <img src="..\assets\images\Artboard1.svg" width="7%"></th>
-              <th>Volumen <img src="..\assets\images\Artboard2.svg" width="11%"> </th>
-              <th>PSA-Dichte <img src="..\assets\images\Artboard2.svg" width="9%"> </th>
+              <th class="userinput">PSA Wert </th>
+              <th class="userinput">PSA Datum </th>
+              <th class="aiinput">Volumen </th>
+              <th>PSA-Dichte </th>
             </tr>
             <ng-container *ngFor="let exam of exams; index as i;">
               <tr [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
@@ -275,6 +281,7 @@
           </table>
         </div>
         <br>
+        </div>
       </div>
     </div>
     <!-- Befunde -->
@@ -294,7 +301,8 @@
               [ngClass]="{'checked': lesion.checked || progress[3]}">
               <span class="material-symbols-outlined checker" *ngIf="lesion.checked || progress[2]">check_small</span>
             </div>
-            Läsion #{{ j + 1 }}
+            Läsion #{{ j + 1 }} <img *ngIf="j <= 1" src="..\assets\images\Artboard2.svg" width="2.8%">
+            <img *ngIf="j > 1" src="..\assets\images\Artboard1.svg" width="2.%">
           </h2>
           <div class="tile">
             <table style="border: 1px solid black;">
@@ -653,16 +661,19 @@
     <!-- Tumorausbreitung -->
     <div class="flex" [ngClass]="{'checked': progress[3], 'current': progressCurrent == 3}">
       <div class="progress-container flex-collum">
-        <div (click)="toggleContentTumor($event)" class="toggle-button">
-          <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
-        </div>
         <div (click)="checkSection(3)" class="checkbox">
           <span class="material-symbols-outlined checker" *ngIf="progress[3]">check</span>
         </div>
         <div class="progress-bar"></div>
       </div>
+      <div class="section-container">
+        <h1 class="head1">Tumorausbreitung
+          <div (click)="toggleContentTumor($event)" class="toggle-button">
+            <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
+          </div>
+        </h1>
       <div class="section-container" [ngClass]="{'hidden': isContentHiddenT}">
-        <h1>Tumorausbreitung</h1>
+        <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
         <div class="tile">
           <table>
             <tr>
@@ -811,21 +822,24 @@
         </div>
         <br>
       </div>
+      </div>
     </div>
     <!-- Nebenbefundeprogress -->
     <div class="flex" [ngClass]="{'checked': progress[4], 'current': progressCurrent == 4}">
       <div class="progress-container flex-collum">
-        <div (click)="toggleContentNeben($event)" class="toggle-button">
-          <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
-        </div>
         <div (click)="checkSection(4)" class="checkbox">
           <span class="material-symbols-outlined checker" *ngIf="progress[4]">check</span>
         </div>
         <div class="progress-bar"></div>
       </div>
-      <div class="section-container" [ngClass]="{'hidden': isContentHidden}">
-        <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
-        <h1>Nebenbefunde</h1>
+      <div class="section-container">
+        <h1 class="head1">Nebenbefunde
+          <div (click)="toggleContentNeben($event)" class="toggle-button">
+            <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
+          </div>
+        </h1>
+        <div class="section-container1" [ngClass]="{'hidden': isContentHidden}">
+          <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
         <div class="tile">
           <table>
             <tr>
@@ -1014,6 +1028,7 @@
           </table>
         </div>
         <br>
+        </div>
       </div>
     </div>
     <!-- Gesamtscore -->
@@ -1025,7 +1040,13 @@
         <div class="progress-bar"></div>
       </div>
       <div class="section-container">
-        <h1>Gesamtscore</h1>
+        <h1 class="head1">Gesamtscore
+          <div (click)="toggleContentGesamtscore($event)" class="toggle-button">
+            <span class="material-symbols-outlined">visibility_off</span> <!-- Auge als Button -->
+          </div>
+        </h1>
+        <div class="section-container1" [ngClass]="{'hidden': isContentHiddenGesamtscore}">
+          <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
         <div class="tile">
           <table>
             <tr>
@@ -1147,6 +1168,7 @@
           </table>
         </div>
         <br>
+        </div>
       </div>
     </div>
   </div>
