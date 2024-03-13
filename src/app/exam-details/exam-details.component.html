@@ -38,7 +38,7 @@
               <th class="userinput">PI-QUAL</th>
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
-              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">pm
+              [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
               <!-- Date -->
               <td (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
                 <div class="cell-content">
