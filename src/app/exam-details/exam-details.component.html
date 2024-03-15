@@ -683,7 +683,7 @@
               <th>Samenblasen</th>
               <th>Lymphknoten</th>
               <th>Knochen</th>
-              <th>Beschreibung</th>
+              <th>Andere Organe</th>
             </tr>
             <tr *ngFor="let exam of exams;" [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}">
               <td class="left" (contextmenu)="detectClickR($event, exam, formatDate(exam.date), '')">
@@ -839,7 +839,6 @@
           </div>
         </h1>
         <div class="section-container1" [ngClass]="{'hidden': isContentHidden}">
-          <!-- Hier bleibt der restliche Inhalt deines Codes unverändert -->
         <div class="tile">
           <table>
             <tr>
@@ -851,7 +850,7 @@
               <th>Prostatitis</th>
               <th>Atrophie</th>
               <th>Fibrosis</th>
-              <th>Beschreibung</th>
+              <th>Andere Nebenbefunde</th>
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
               [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
@@ -1382,7 +1381,7 @@
                       <td class="emphasized">{{ toBool(getActiveExam().stagingBM) }}</td>
                     </tr>
                     <tr *ngIf="getActiveExam().stagingOther.trim().length > 0">
-                      <td>Beschreibung:</td>
+                      <td>Andere Organe:</td>
                       <td class="emphasized">{{ (getActiveExam().stagingOther) }}</td>
                     </tr>
                   </table>
@@ -1420,7 +1419,7 @@
                       <td class="emphasized">{{ toBool(getActiveExam().environment[6]) }}</td>
                     </tr>
                     <tr *ngIf="getActiveExam().other.trim().length > 0">
-                      <td>Beschreibung:</td>
+                      <td>Andere Nebenbefunde:</td>
                       <td class="emphasized">{{ (getActiveExam().other) }}</td>
                     </tr>
                   </table>
