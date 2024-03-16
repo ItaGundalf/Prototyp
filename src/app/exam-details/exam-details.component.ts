@@ -729,7 +729,7 @@ class Exam {
   }
 
   stagingActive() {
-    if (this.stagingEPE >= 0 || this.stagingNVB >= 0 || this.stagingSV >= 0 || this.stagingLK >= 0 || this.stagingBM >= 0 || this.stagingOther.trim().length > 0) return true;
+    if (this.stagingEPE >= 0 || this.stagingNVB >= 0 || this.stagingSV >= 0 || this.stagingLK >= 0 || this.stagingBM >= 0) return true;
     else return false;
   }
 

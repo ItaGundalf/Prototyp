@@ -1380,7 +1380,7 @@
                       <td>Knochen:</td>
                       <td class="emphasized">{{ toBool(getActiveExam().stagingBM) }}</td>
                     </tr>
-                    <tr *ngIf="getActiveExam().stagingOther.trim().length > 0">
+                    <tr *ngIf="getActiveExam().stagingOther.trim().length >= 0">
                       <td>Andere Organe:</td>
                       <td class="emphasized">{{ (getActiveExam().stagingOther) }}</td>
                     </tr>
@@ -1418,7 +1418,7 @@
                       <td>Fibrosis:</td>
                       <td class="emphasized">{{ toBool(getActiveExam().environment[6]) }}</td>
                     </tr>
-                    <tr *ngIf="getActiveExam().other.trim().length > 0">
+                    <tr *ngIf="getActiveExam().other.trim().length >= 0">
                       <td>Andere Nebenbefunde:</td>
                       <td class="emphasized">{{ (getActiveExam().other) }}</td>
                     </tr>
