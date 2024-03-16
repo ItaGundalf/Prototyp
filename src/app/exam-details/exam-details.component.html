@@ -31,7 +31,7 @@
         <div class="tile">
           <table>
             <tr>
-              <th class="userinput">Datum</th>
+              <th>Datum</th>
               <th class="userinput">T2W</th>
               <th class="userinput">DWI</th>
               <th class="userinput">DCE</th>
@@ -403,8 +403,9 @@
                     (dblclick)="detectDblClick(instance, 'lesion-diameter')"
                     [ngClass]="{'na': isNA(instance.diameter)}">
                     <div class="cell-content" *ngIf="!instance.editDiameter">
-                      {{ toNumber(instance.diameter, 1) }}
-                      <span class="unit" *ngIf="!isNA(instance.diameter)">mm</span>
+                      <span [ngClass]="{'warning-1': instance.diameter >= 200}">
+                      {{ toNumber(instance.diameter, 1) }} </span>
+                      <span class="unit"  *ngIf="!isNA(instance.diameter)">mm</span>
                     </div>
                     <div class="cell-content" *ngIf="instance.editDiameter">
                       <div>
