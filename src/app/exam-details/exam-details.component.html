@@ -32,10 +32,10 @@
           <table>
             <tr>
               <th>Datum</th>
-              <th class="userinput">T2W</th>
-              <th class="userinput">DWI</th>
-              <th class="userinput">DCE</th>
-              <th class="userinput">PI-QUAL</th>
+              <th> T2W <img src="..\assets\images\Artboard1.svg" width="9%"></th> 
+              <th> DWI <img src="..\assets\images\Artboard1.svg" width="9%"></th> 
+              <th> DCE <img src="..\assets\images\Artboard1.svg" width="9%"></th> 
+              <th>PI-QUAL <img src="..\assets\images\Artboard1.svg" width="8%"></th> 
             </tr>
             <tr *ngFor="let exam of exams; index as i;"
               [ngClass]="{'past': !isActiveExam(exam), 'active': isActiveExam(exam)}" class="editable">
